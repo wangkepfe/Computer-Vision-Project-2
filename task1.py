@@ -12,7 +12,7 @@ objp[:,:2] = np.mgrid[0:7,0:6].T.reshape(-1,2)
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
- 
+
 
 img = cv2.imread('calibration.jpg')
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -29,11 +29,16 @@ if ret == True:
 	imgpoints.append(corners2)
 
 	# Draw and display the corners
-	img = cv2.drawChessboardCorners(img, (400,400), corners2,ret)
+	img = cv2.drawChessboardCorners(img, (7,6), corners2,ret)
 	cv2.imshow('img',img)
 	cv2.waitKey(500)
 
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
+
+##############################################
+#upper is for task 1, lower is for task 2
+##############################################
+print(mtx)
 
 
 img = cv2.imread('left.jpg')
@@ -49,9 +54,11 @@ dst = dst[y:y+h, x:x+w]
 cv2.imwrite('calibresult.png', dst)
 
 
-mean_error = 0
-for i in range(len(objpoints)):
-	imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], mtx, dist)
-	error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2)/len(imgpoints2)
-	mean_error += error
-print( "total error: {}".format(mean_error/len(objpoints)) )
+
+
+# mean_error = 0
+# for i in range(len(objpoints)):
+# 	imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], mtx, dist)
+# 	error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2)/len(imgpoints2)
+# 	mean_error += error
+# print( "total error: {}".format(mean_error/len(objpoints)) )
